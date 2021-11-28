@@ -6,23 +6,38 @@ import java.util.Set;
 
 public class RpsGameApplication
 {
+    static HighScoreDatabase highScoreDatabase = new HighScoreDatabase();
     static Scanner scanner = new Scanner(System.in);
     static RPSGame rpsGame = new RPSGame();
-    static HighScore highScore = new HighScore();
-    String name;
+
+    static final String filePath = "D:/Database/highScores.txt";
 
     public static void main(String[] args) throws IOException
     {
-        String name;
-        int roundsCount;
+        highScoreDatabase.LoadFromFile(filePath);
+
+        String playerName;
+        int roundsCount = 0;
         int playerPoints = 0;
         int computerPoints = 0;
 
         System.out.print("Enter Your Name: ");
-        name = scanner.nextLine();
+        playerName = scanner.nextLine();
+        boolean correctValue = true;
 
         System.out.print("How Many Rounds Would You Like To Play: ");
-        roundsCount = Integer.parseInt(scanner.nextLine());
+        do
+        {
+            try
+            {
+                roundsCount = Integer.parseInt(scanner.nextLine());
+            }
+            catch (Exception e)
+            {
+                correctValue = false;
+            }
+        }
+        while (!correctValue);
 
         int currentRound = 0;
 
@@ -60,15 +75,15 @@ public class RpsGameApplication
 
             switch (playerResult)
             {
-                case Lose:
+                case LOSE:
                     System.out.println("You Lose!");
                     computerPoints++;
                     break;
-                case Win:
+                case WIN:
                     System.out.println("You Win!");
                     playerPoints++;
                     break;
-                case Tie:
+                case TIE:
                     System.out.println("Tie!");
                     break;
             }
@@ -76,16 +91,19 @@ public class RpsGameApplication
             currentRound++;
         }
 
-        RPSResult gameResult = RPSResult.Tie;
+        RPSResult gameResult = RPSResult.TIE;
 
         if (playerPoints > computerPoints)
-            gameResult = RPSResult.Win;
+            gameResult = RPSResult.WIN;
         else if (playerPoints < computerPoints)
-            gameResult = RPSResult.Lose;
+            gameResult = RPSResult.LOSE;
 
         System.out.println("Game Result: " + gameResult.name());
 
-        highScore.addScore(name, playerPoints, computerPoints, gameResult);
+        HighScore highScore = new HighScore(playerName, playerPoints, computerPoints, gameResult);
+        highScoreDatabase.AddScore(highScore);
+        highScoreDatabase.SaveToFile(filePath);
+
     }
 
 }

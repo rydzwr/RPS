@@ -1,9 +1,1 @@
-
-Name: KAcper
-Player Points: 2 Computer Points: 1
-Game Result: Win
-
-Name: Jacke
-Player Points: 1 Computer Points: 2
-Game Result: Lose
-
+L;0;1;LOSE

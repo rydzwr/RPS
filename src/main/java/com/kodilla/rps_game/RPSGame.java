@@ -4,8 +4,8 @@ import java.util.Random;
 
 enum RPSMove
 {
-    Rock(114), Paper(112), Scissors(115);
-    private int rpsMove;
+    ROCK(114), PAPER(112), SCISSORS(115);
+    private final int rpsMove;
 
     RPSMove(int rpsMove)
     {
@@ -21,9 +21,9 @@ enum RPSMove
     {
         switch (ch)
         {
-            case ('r'): return RPSMove.Rock;
-            case ('p'): return RPSMove.Paper;
-            case ('s'): return RPSMove.Scissors;
+            case ('r'): return RPSMove.ROCK;
+            case ('p'): return RPSMove.PAPER;
+            case ('s'): return RPSMove.SCISSORS;
 
             default: throw new IllegalArgumentException("Conversion Failed!");
         }
@@ -32,7 +32,7 @@ enum RPSMove
 
 enum RPSResult
 {
-    Win, Lose, Tie;
+    WIN, LOSE, TIE;
 }
 
 public class RPSGame
@@ -49,36 +49,36 @@ public class RPSGame
     RPSResult checkResult(RPSMove player1Move, RPSMove player2Move)
     {
         if(player1Move.equals(player2Move))
-            return RPSResult.Tie;
+            return RPSResult.TIE;
 
-        if(player1Move == RPSMove.Paper)
+        if(player1Move == RPSMove.PAPER)
         {
             switch (player2Move)
             {
-                case Rock:
-                    return RPSResult.Win;
-                case Scissors:
-                    return RPSResult.Lose;
+                case ROCK:
+                    return RPSResult.WIN;
+                case SCISSORS:
+                    return RPSResult.LOSE;
             }
         }
-        else if (player1Move == RPSMove.Rock)
+        else if (player1Move == RPSMove.ROCK)
         {
             switch (player2Move)
             {
-                case Paper:
-                    return RPSResult.Lose;
-                case Scissors:
-                    return RPSResult.Win;
+                case PAPER:
+                    return RPSResult.LOSE;
+                case SCISSORS:
+                    return RPSResult.WIN;
             }
         }
-        else if (player1Move == RPSMove.Scissors)
+        else if (player1Move == RPSMove.SCISSORS)
         {
             switch (player2Move)
             {
-                case Paper:
-                    return RPSResult.Win;
-                case Rock:
-                    return RPSResult.Lose;
+                case PAPER:
+                    return RPSResult.WIN;
+                case ROCK:
+                    return RPSResult.LOSE;
             }
         }
 
