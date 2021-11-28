@@ -1,5 +1,6 @@
 package com.kodilla.rps_game;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -7,9 +8,10 @@ public class RpsGameApplication
 {
     static Scanner scanner = new Scanner(System.in);
     static RPSGame rpsGame = new RPSGame();
+    static HighScore highScore = new HighScore();
     String name;
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         String name;
         int roundsCount;
@@ -82,6 +84,8 @@ public class RpsGameApplication
             gameResult = RPSResult.Lose;
 
         System.out.println("Game Result: " + gameResult.name());
+
+        highScore.addScore(name, playerPoints, computerPoints, gameResult);
     }
 
 }
