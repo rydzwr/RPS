@@ -25,16 +25,18 @@ public class RpsGameApplication
         playerName = scanner.nextLine();
         boolean correctValue = true;
 
-        System.out.print("How Many Rounds Would You Like To Play: ");
         do
         {
             try
             {
+                System.out.print("How Many Rounds Would You Like To Play: ");
                 roundsCount = Integer.parseInt(scanner.nextLine());
+                correctValue = true;
             }
             catch (Exception e)
             {
                 correctValue = false;
+                System.out.println("Incorrect Value!");
             }
         }
         while (!correctValue);
