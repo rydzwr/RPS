@@ -1,20 +1,35 @@
 package com.kodilla.advancedGame;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 
 public class RPSGameApplication
 {
+    static HighScoreDatabase highScoreDatabase = new HighScoreDatabase();
     static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args)
+    static final String filePath = "D:/Database/highScores.txt";
+
+    public static void main(String[] args) throws IOException
     {
+        highScoreDatabase.loadFromFile(filePath);
+
         int playerPoints = 0;
         int computerPoints = 0;
         int currentRound = 0;
+        String playerName;
 
-        System.out.print("Enter Your Name: ");
-        String playerName = scanner.nextLine();
+        do
+        {
+            System.out.print("Enter Your Name: ");
+            playerName = scanner.nextLine();
+
+            if (playerName.isEmpty())
+                System.out.println("Name Can Not Be Empty!");
+        }
+        while (playerName.isEmpty());
+
 
         RPSDifficulty difficulty = getRpsDifficulty();
         char gameType = getGameType();
@@ -94,6 +109,10 @@ public class RPSGameApplication
 
         System.out.println();
         System.out.println("Game Result --> " + gameResult.name());
+
+        HighScore highScore = new HighScore(playerName, playerPoints, computerPoints, gameType, difficulty, gameResult);
+        highScoreDatabase.AddScore(highScore);
+        highScoreDatabase.SaveToFile(filePath);
     }
 
     private static int getRoundCount()
@@ -111,8 +130,11 @@ public class RPSGameApplication
             }
             catch (Exception e)
             {
-                correctValue = false;
-                System.out.println("Incorrect Value!");
+                if (!correctValue || roundsCount <= 0)
+                {
+                    correctValue = false;
+                    System.out.println("Incorrect Value!");
+                }
             }
         }
         while (!correctValue);
@@ -123,15 +145,20 @@ public class RPSGameApplication
     private static char getGameType()
     {
         Set<Character> gameTypeSet = Set.of('a', 's');
-        char gameTypeSelection;
+        char gameTypeSelection = '\n';
 
         do
         {
-            System.out.print("Choose Game Type, (S)imple or (A)dvanced Witch More Move Options: ");
-            gameTypeSelection = scanner.nextLine().toLowerCase().charAt(0);
-
-            if (!gameTypeSet.contains(gameTypeSelection))
-                System.out.println("Wrong Letter!");
+            try
+            {
+                System.out.print("Choose Game Type, (S)imple or (A)dvanced Witch More Move Options: ");
+                gameTypeSelection = scanner.nextLine().toLowerCase().charAt(0);
+            }
+            catch (Exception e)
+            {
+                if (!gameTypeSet.contains(gameTypeSelection) || gameTypeSelection == '\n')
+                    System.out.println("Wrong Letter!");
+            }
         }
         while (!gameTypeSet.contains(gameTypeSelection));
 
@@ -141,16 +168,22 @@ public class RPSGameApplication
     private static RPSDifficulty getRpsDifficulty()
     {
         Set<Character> difficultyOptions = Set.of('e', 'n', 'h');
-        char difficultySelection;
+        char difficultySelection = ' ';
 
         do
         {
-            System.out.print("Choose Difficulty: (E)asy, (N)ormal, (H)ard: ");
-            difficultySelection = scanner.nextLine().toLowerCase().charAt(0);
-
-            if (!difficultyOptions.contains(difficultySelection))
-                System.out.println("Wrong Letter!");
-
+            try
+            {
+                System.out.print("Choose Difficulty: (E)asy, (N)ormal, (H)ard: ");
+                difficultySelection = scanner.nextLine().toLowerCase().charAt(0);
+            }
+            catch (Exception e)
+            {
+                if (!difficultyOptions.contains(difficultySelection))
+                    System.out.println("Wrong Letter!");
+                else if (difficultySelection == ' ')
+                    System.out.println("Input Can Not Be Empty!");
+            }
         }
         while (!difficultyOptions.contains(difficultySelection));
 
